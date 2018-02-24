@@ -1,18 +1,60 @@
 html{
 	border: none;
 	background: url("imgs/background.jpg");
-	background-size: 60%;
+	background-size: 65%;
 	height: 100%;	
+}
+
+@font-face {
+    font-family: baseFont;
+    src: url(baltazar.ttf);
 }
 
 .mainBack{
 	margin: auto;
-	margin-top: 100px;
-	width: 1000px;
+	margin-top: 50px;
+	width: 900px;
 	/*background-color: #000;*/
 	background: url("imgs/img1.jpg");
+	background-size: 900px 550px;
 	border-radius: 4px;
 	box-shadow: 0px 0px 3px 3px #000;
-	height: 600px;
+	height: 550px;	
+}
 
+.questionTextDiv{
+	background-color: rgba(0,0,0,0.6);
+	border-radius: 4px;
+	box-shadow: 5px 2px 5px #000;
+	font: 54px baseFont;
+
+	position: relative;
+	margin: auto;
+	width: 900px;
+	top: 00%;
+	text-align: center;
+	padding: 0px 0 10px 0;
+
+}
+
+.questionText{
+	color: #cef2ff;
+	text-shadow: 0px 0px 5px #42ccff;
+	padding: 15px 0 0px 0;
+}
+
+.questionTitle{	
+	background-color: rgba(0,0,0,0.6);
+	width: 20%;
+	margin: auto;
+	border: 1px solid #cef2ff;
+	box-shadow: 0px 0px 2px #cef2ff;
+	border-radius: 4px;	
+	position: relative;
+	top: 10px;
+	padding: 10px 0 15px 0;
+	font-size: 35px;
+	line-height: 50%;
+	color: #cef2ff;
+	text-shadow: 0px 0px 5px #42ccff;
 }
