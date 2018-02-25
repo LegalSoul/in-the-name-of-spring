@@ -1,7 +1,12 @@
+
 loadJsonFromFile(function(response){
 	var questions = JSON.parse(response);
 	console.log(questions);
 
+
+	showIntro(questions);
+
+	startQuiz();
 	// var bgm = new Audio('bgm.mp3');
 	// bgm.addEventListener('ended', function() {
 	//     this.currentTime = 0;
@@ -9,7 +14,7 @@ loadJsonFromFile(function(response){
 	// }, false);
 	// bgm.play();
 
-	
+
 
 
 
@@ -17,8 +22,48 @@ loadJsonFromFile(function(response){
 	// localStorage.setItem('results', stringified);
 	// var retrievedObject = localStorage.getItem('results');
 	// console.log('retrievedObject: ', JSON.parse(retrievedObject));	
-
 });
+
+
+
+function showIntro(questions){
+	setTimeout(function(){ 
+		var introDiv = createCustomElement(
+			"div",
+			questions.introText,
+			".mainBack",
+			["introText","animatedFadeIn"]
+		);
+
+		setTimeout(function(){ 
+			var introDiv = createCustomElement(
+				"div",
+				"Start Quiz",
+				".mainBack",
+				["startQuiz","animatedFadeIn"]
+			);
+
+			setTimeout(function(){
+				introDiv.style.animation = "scalePulse 3s cubic-bezier(0.5, 0.25, 0.25, 0.7) infinite";
+			}, 1000);
+
+		}, 1000);	
+
+	}, 1000);	
+	
+};
+function startQuiz(){
+};
+
+function createCustomElement(type, innerHTML, parentSelector, classesArray){
+	var newElement = document.createElement(type);
+	newElement.innerHTML = innerHTML;	
+	document.querySelector(parentSelector).appendChild(newElement);
+	for (var i = classesArray.length - 1; i >= 0; i--) {
+		newElement.classList.add(classesArray[i]);
+	};
+	return newElement;
+}
 
 function loadJsonFromFile(callbackFunction){
 	var request = new XMLHttpRequest();
