@@ -2,12 +2,14 @@ loadJsonFromFile(function(response){
 	var questions = JSON.parse(response);
 	console.log(questions);
 
-	var bgm = new Audio('bgm.mp3');
-	bgm.addEventListener('ended', function() {
-	    this.currentTime = 0;
-	    this.play();
-	}, false);
-	bgm.play();
+	// var bgm = new Audio('bgm.mp3');
+	// bgm.addEventListener('ended', function() {
+	//     this.currentTime = 0;
+	//     this.play();
+	// }, false);
+	// bgm.play();
+
+	
 
 
 
