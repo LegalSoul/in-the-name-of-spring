@@ -1,10 +1,12 @@
 var MAIN_WIDTH = document.querySelector(".mainBack").clientWidth;
+var QUESTIONS = "";
+var CURRENT_QUESTION = 0;
 console.log(MAIN_WIDTH);
 
 loadJsonFromFile(function(response){
-	var questions = JSON.parse(response);
-	console.log(questions);
-	showIntro(questions);
+	QUESTIONS = JSON.parse(response);
+	console.log(QUESTIONS);
+	showIntro();
 	// var bgm = new Audio('bgm.mp3');
 	// bgm.addEventListener('ended', function() {
 	//     this.currentTime = 0;
@@ -18,11 +20,11 @@ loadJsonFromFile(function(response){
 	// console.log('retrievedObject: ', JSON.parse(retrievedObject));	
 });
 
-function showIntro(questions){
+function showIntro(){
 	setTimeout(function(){ 
 		var introDiv = createCustomElement(
 			"div",
-			questions.introText,
+			QUESTIONS.introText,
 			document.querySelector(".mainBack"),
 			["introText","animatedFadeIn"]
 		);
@@ -50,8 +52,7 @@ function showIntro(questions){
 				setTimeout(function(){					
 					startQuizButton.remove();
 					introDiv.remove();
-					document.querySelector(".mainBack").style.background = "none";
-					startQuiz(questions);
+					startQuiz();
 				}, 1000);
 			});
 
@@ -60,14 +61,18 @@ function showIntro(questions){
 	}, 1000);	
 	
 };
-function startQuiz(questions){
+function startQuiz(){
 	// startSnow();!!!!!!!!!!!!!!!!!
 
-	createQuestionsMap(questions);
+	createQuestionsMap();
+
+	setTimeout(function(){
+		loadQuestion(CURRENT_QUESTION);
+	}, 2000);
 
 };
 
-function createQuestionsMap(questions){	
+function createQuestionsMap(){	
 	var questionsMap = createCustomElement(
 		"div",	
 		"",	
@@ -76,28 +81,83 @@ function createQuestionsMap(questions){
 	);
 
 	var mainCenter = MAIN_WIDTH / 2;
-	var questionsCount = questions["questions"].length;
+	var questionsCount = QUESTIONS["questions"].length;
 	var fullWidth = 30 * questionsCount;	
 
 	for (var i = questionsCount - 1; i >= 0; i--) {
 		var questionIcon = createCustomElement(
 			"div",	
-			i.toString(),	
+			(i+1).toString(),	
 			questionsMap,
 			["questionIcon","scaleIn"]
 		);
 		questionIcon.style.left = (mainCenter + i * 30 - fullWidth/2) + "px";
 		questionIcon.style.transform = "scale(0)";
 		questionIcon.style.animationDelay = (i / 10)  + "s";
+		questionIcon.id = "questionIcon" + i;
 	};
 
 }
 
+function loadQuestion(currentQuestion){
+	var currentIcon = document.querySelector("#questionIcon" + currentQuestion);
+	replaceClass(currentIcon, "scaleIn", "activeQuestion");
+	currentIcon.style.transform = "scale(1)";
 
+	var mainBack = document.querySelector(".mainBack");
+	var mainBackOverlay = document.querySelector(".mainBackOverlayImage");
+
+	mainBackOverlay.style.background = "url('imgs/img" + currentQuestion + ".jpg')";	
+	mainBackOverlay.style.backgroundSize = "900px 550px";	
+	// mainBackOverlay.style.opacity = 0;
+	mainBackOverlay.classList.add("animatedFadeIn");
+
+	
+	replaceClass(document.querySelector(".questionTextDiv"), "hidden", "animatedFadeIn");
+
+	document.querySelector(".questionTitle").innerHTML = 
+		"Question " + (currentQuestion + 1) + "/" + QUESTIONS["questions"].length;
+	document.querySelector(".questionText").innerHTML = QUESTIONS["questions"][currentQuestion]["text"];
+	
+	var answers = QUESTIONS["questions"][currentQuestion]["answers"];
+	var answersArea = document.querySelector(".answersArea");
+	var answersElements = new Array(answers.length);
+	for (var i = answers.length - 1; i >= 0; i--) {
+		var answerElement = createCustomElement(
+			"div",	
+			answers[i],
+			answersArea,
+			["optionText","optionIn"]
+		);		
+		answersElements[i] = answerElement;
+
+		var animationDelayInSec = i/2;		
+		enableDisplayAfterTimeout(animationDelayInSec, answerElement);
+		answerElement.style.animationDelay = animationDelayInSec + "s";
+		answerElement.style.top = ( i * 50 ) + "px";
+		answerElement.id = "questionIcon" + i;
+	};
+
+	// setTimeout(function(){
+	// 	mainBackOverlay.style.animation = "none";
+	// 	setTimeout(function(){
+	// 		mainBackOverlay.style.animation = "";			
+
+	// 	},100);
+	// },2000);
+
+}
+
+function enableDisplayAfterTimeout(delay, object){
+	setTimeout(function(){
+		object.style.display = "block";			
+	}, delay * 1000);
+}
 
 function replaceClass(element, from, to){
 	element.classList.remove(from);
 	element.classList.add(to);
+	
 }
 
 function createCustomElement(type, innerHTML, parent, classesArray){

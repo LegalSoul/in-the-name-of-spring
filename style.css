@@ -12,7 +12,12 @@
 }
 
 @keyframes scaleIn{
-	from{transform: scale(0) rotate(180deg); }
+	from{transform: scale(0) rotate(900deg); }
+	to{transform: scale(1) rotate(0deg);}
+}
+
+@keyframes optionIn{
+	from{transform: scale(0) rotate(0deg); }
 	to{transform: scale(1) rotate(0deg);}
 }
 
@@ -20,6 +25,12 @@
 	from{transform: scale(1);}
 	50%{transform: scale(1.05);}
 	to{transform: scale(1);}
+}
+
+@keyframes pulseColor{
+	from{background-color: #000; color:#fff; text-shadow: 0px 0px 8px #fff;}
+	50%{background-color: #0090c6; color:#000; text-shadow: 0px 0px 8px #000;}
+	to{background-color: #000; color:#fff; text-shadow: 0px 0px 8px #fff;}
 }
 
 @keyframes scaleHover{
@@ -43,7 +54,7 @@ div{
     src: url(baltazar.ttf);
 }
 
-.mainBack,.mainContainterImage{
+.mainBack{
 	margin: auto;
 	margin-top: 10px;
 	width: 900px;
@@ -55,13 +66,20 @@ div{
 	height: 550px;	
 	font: 54px baseFont;	
 	text-align: center;
-
 	/*opacity: 0.5;*/
+	position: relative;
 }
 
-.mainContainterImage{
+
+
+.mainBackOverlayImage{
+	position: absolute;
+	margin-top: 0px;
 	background: url("imgs/img_intro.jpg");
 	background-size: 900px 550px;
+	width: 900px;
+	height: 550px;	
+
 }
 
 
@@ -90,7 +108,7 @@ div{
 	margin: auto;
 	border: 1px solid #cef2ff;
 	box-shadow: 0px 0px 2px #cef2ff;
-	border-radius: 4px;	
+	border-radius: 4px 4px 0 0;	
 	position: relative;
 	top: 10px;
 	padding: 10px 0 14px 0;
@@ -104,7 +122,7 @@ div{
 	width: 900px;
 	margin: auto;
 	text-align: right;
-	margin-top: 25px;
+	margin-top: 8px;
 }
 
 
@@ -128,25 +146,31 @@ div{
 
 .animatedFadeIn{
 	animation: fadeIn 1s;
-};
+}
 
+.answersArea{
+	position: absolute;
+	margin-top: 10px;
+	padding: 10px;
+	height: 380px;
+	width: 98%;
+
+	/*background-color: #fff;*/
+}
 
 .optionText{
 	background-color: rgba(0,0,0,0.6);
+	display: none;
 	box-shadow: 0px 0px 2px #000;
 	border-radius: 4px;	
-	position: relative;
-	top: 100px;
-	left: 100px;
-	font-size: 25px;
+	position: absolute;
+	font-size: 20px;
 	color: #cef2ff;
 	padding: 10px 10px;
-	max-width: 250px;	
-	display:inline-block;
 	text-shadow: 0px 0px 5px #42ccff;
 	transition: 0.3s;
 	text-align: center;
-
+	transform: scale(1.0);
 }
 
 .optionText:hover{
@@ -156,15 +180,12 @@ div{
 	transition: 0.3s;
 
 }
-.answersArea{
-	padding: 10px;
-	height: 65%;
-	/*background-color: #fff;*/
-}
+
 
 
 
 .introText{
+	position: relative;
 	background-color: rgba(0,0,0,0.7);
 	box-shadow: 0px 0px 2px #000;
 	border-radius: 4px;	
@@ -209,13 +230,13 @@ div{
 }
 
 .questionsMap{
-	position: relative;
+	position: absolute;
 	top:520px;
 	width: 100%;
-	height: 31px;
+	height: 35px;
 	background-color: rgba(0,0,0,0.7);
 	border-radius: 0 0 4px 4px;
-	box-shadow: 0px 0px 2px #000;
+	box-shadow: 0px 0px 4px #000;
 
 }
 
@@ -231,8 +252,24 @@ div{
 	color: #00baff;
 	border: 1px solid #0058b3;
 }
+.activeQuestion{
+	/*background-color: #fff ;*/
+	color: #fff;
+	text-shadow: 0px 0px 8px #fff;
+	border: 1px solid #0093c9;
+	animation: pulseColor 2s ease infinite;
+}
 
 .scaleIn{
 	animation: scaleIn 2s forwards;
 
+}
+
+.optionIn{
+	animation: optionIn 2s;
+
+}
+
+.hidden{
+	display: none;
 }

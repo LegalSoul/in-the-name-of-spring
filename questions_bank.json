@@ -2,40 +2,46 @@
 	"questions": [
 		{
 			"text": "WHY?",
-			"answer": "cause"
+			"answers": [
+				"cause",
+				"because",
+				"because cause",
+				"NO",
+				"YES yesssss YESSSS"
+			]
 		},
 		{
 			"text": "WHO?",
-			"answer": "me"
+			"answers": "me"
 		},
 		{
 			"text": "WHEN?",
-			"answer": "now"
+			"answers": "now"
 		},
 		{
 			"text": "WHY?",
-			"answer": "cause"
+			"answers": "cause"
 		},
 		{
 			"text": "WHO?",
-			"answer": "me"
+			"answers": "me"
 		},
 		{
 			"text": "WHEN?",
-			"answer": "now"
+			"answers": "now"
 		},
 		{
 			"text": "WHY?",
-			"answer": "cause"
+			"answers": "cause"
 		},
 		{
 			"text": "WHO?",
-			"answer": "me"
+			"answers": "me"
 		},
 		{
 			"text": "WHEN?",
-			"answer": "now"
+			"answers": "now"
 		}
 	],
-	"introText": "Sometimes winter evenings are getting too cold and the warmth in our hearts starts to fade away... \n\n In times like these all that we need is a drop of light, the spring sun that will chase away the cold and blue feelings. \n\n This JavaScript quiz was made in the name of Spring. Every correct answer will give a bit of warm JavaScript energy to the dying flower of life that is our only hope for bringing Spring back..."
+	"introText": "Sometimes Winter evenings are getting too cold and the warmth in our hearts starts to fade away... \n\n In times like these all that we need is a drop of light, the spring sun that will chase away the cold and blue feelings. \n\n This JavaScript quiz was made in the name of Spring. Every correct answer will give a bit of warm JavaScript energy to the dying flower of life that is our only hope for bringing Spring back..."
 }
