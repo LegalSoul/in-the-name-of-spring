@@ -1,11 +1,11 @@
 var MAIN_WIDTH = document.querySelector(".mainBack").clientWidth;
 var QUESTIONS = "";
+var USED_QUESTIONS_NUMBER = 10;
 var CURRENT_QUESTION = 0;
 console.log(MAIN_WIDTH);
 
 loadJsonFromFile(function(response){
 	QUESTIONS = JSON.parse(response);
-	console.log(QUESTIONS);
 	showIntro();
 	// var bgm = new Audio('bgm.mp3');
 	// bgm.addEventListener('ended', function() {
@@ -46,7 +46,7 @@ function showIntro(){
 			startQuizButton.addEventListener("click", function startQuizClick(){			
 				startQuizButton.classList.remove("startQuizHoverClass");
 				startQuizButton.removeEventListener("click", startQuizClick);				
-				startQuizButton.style.animation = "fadeOut 0.4s forwards";
+				startQuizButton.style.animation = "scaleOutStart ease 0.4s forwards";
 				startQuizButton.style.cursor = "default";
 				introDiv.style.animation = "fadeOut 0.8s forwards";
 				setTimeout(function(){					
@@ -63,8 +63,12 @@ function showIntro(){
 };
 function startQuiz(){
 	// startSnow();!!!!!!!!!!!!!!!!!
-
+	shuffleArray(QUESTIONS["questions"]);
+	QUESTIONS["questions"].length = USED_QUESTIONS_NUMBER;
 	createQuestionsMap();
+	console.log(QUESTIONS);
+
+
 
 	setTimeout(function(){
 		loadQuestion(CURRENT_QUESTION);
@@ -100,58 +104,130 @@ function createQuestionsMap(){
 }
 
 function loadQuestion(currentQuestion){
-	var currentIcon = document.querySelector("#questionIcon" + currentQuestion);
-	replaceClass(currentIcon, "scaleIn", "activeQuestion");
-	currentIcon.style.transform = "scale(1)";
+	(function setCurrentIcon(){
+		var currentIcon = document.querySelector("#questionIcon" + currentQuestion);
+		replaceClass(currentIcon, "scaleIn", "activeQuestion");
+		currentIcon.style.transform = "scale(1)";
+	})();
+	(function prepareBackground(){
+		var mainBack = document.querySelector(".mainBack");
+		var mainBackOverlay = document.querySelector(".mainBackOverlayImage");
+		mainBackOverlay.style.background = "url('imgs/img" + currentQuestion + ".jpg')";	
+		mainBackOverlay.style.backgroundSize = "900px 550px";	
+		mainBackOverlay.classList.add("animatedFadeIn");
+	})();
 
-	var mainBack = document.querySelector(".mainBack");
-	var mainBackOverlay = document.querySelector(".mainBackOverlayImage");
-
-	mainBackOverlay.style.background = "url('imgs/img" + currentQuestion + ".jpg')";	
-	mainBackOverlay.style.backgroundSize = "900px 550px";	
-	// mainBackOverlay.style.opacity = 0;
-	mainBackOverlay.classList.add("animatedFadeIn");
-
-	
-	replaceClass(document.querySelector(".questionTextDiv"), "hidden", "animatedFadeIn");
-
-	document.querySelector(".questionTitle").innerHTML = 
-		"Question " + (currentQuestion + 1) + "/" + QUESTIONS["questions"].length;
-	document.querySelector(".questionText").innerHTML = QUESTIONS["questions"][currentQuestion]["text"];
+	(function loadQuestion(){
+		replaceClass(document.querySelector(".questionTextDiv"), "hidden", "animatedFadeIn");
+		document.querySelector(".questionTitle").innerHTML = 
+			"Question " + (currentQuestion + 1) + "/" + QUESTIONS["questions"].length;
+		document.querySelector(".questionText").innerHTML = QUESTIONS["questions"][currentQuestion]["text"];
+	})();
 	
 	var answers = QUESTIONS["questions"][currentQuestion]["answers"];
 	var answersArea = document.querySelector(".answersArea");
 	var answersElements = new Array(answers.length);
-	for (var i = answers.length - 1; i >= 0; i--) {
-		var answerElement = createCustomElement(
-			"div",	
-			answers[i],
-			answersArea,
-			["optionText","optionIn"]
-		);		
-		answersElements[i] = answerElement;
 
-		var animationDelayInSec = i/2;		
-		enableDisplayAfterTimeout(animationDelayInSec, answerElement);
-		answerElement.style.animationDelay = animationDelayInSec + "s";
-		answerElement.style.top = ( i * 50 ) + "px";
-		answerElement.id = "questionIcon" + i;
-	};
+	(function createAnswers(){
+		for (var i = answers.length - 1; i >= 0; i--) {
+			var answerElement = createCustomElement(
+				"div",	
+				answers[i],
+				answersArea,
+				["optionText","optionIn"]
+			);		
+			answersElements[i] = answerElement;
+			var animationDelayInSec = i/6;		
+			answerElement.style.animationDelay = animationDelayInSec + "s";
+			answerElement.style.opacity = "0";
+			answerElement.id = "answer" + i;
+			// set clickListener after items ready
+			(function(answerElement, i) {
+				setTimeout(function(){
+					answerElement.style.opacity = "1";
+					answerElement.style.animation = "none";
+					answerElement.classList.add("optionTextHover");
+					answerElement.addEventListener("click", function checkAnswer(){					
+						this.removeEventListener("click", checkAnswer);	
+						this.style.animation = "scaleOut 1s ease forwards";
+						this.classList.add("selectedAnswer");
+						this.classList.remove("optionTextHover");
+						var allAnswers = document.querySelectorAll(".optionText");
+						for (var i = allAnswers.length - 1; i >= 0; i--) {
+							if (allAnswers[i] != this){
+							allAnswers[i].style.animation = "scaleOutOthers 1s forwards";					
+							}
+							timeoutRemoveElement(allAnswers[i]);
+						};
+					});
+				}, 2700);
+			})(answerElement, i);					
+		};		
+	})();
+	
+	(function setAnimationToAnswers(){
+		var maxY = selector(".mainBack").clientHeight 
+			- selector(".questionsMap").clientHeight 
+			- selector(".questionTextDiv").clientHeight;
+		var maxX = answersArea.clientWidth;
+		var halfY = maxY / 2;
+		var halfX = maxX / 2;
 
-	// setTimeout(function(){
-	// 	mainBackOverlay.style.animation = "none";
-	// 	setTimeout(function(){
-	// 		mainBackOverlay.style.animation = "";			
+		// initial position
+		circleAnimationTimeout(answersElements, 0, halfX, halfY, true);	
 
-	// 	},100);
-	// },2000);
+		(function(answersElements, halfX, halfY){
+			setTimeout(function(){			
+				circleAnimationTimeout(answersElements, 0, halfX, halfY, false);	
+			},2500);
+		})(answersElements, halfX, halfY);
+		
+	})();
+
+
 
 }
 
-function enableDisplayAfterTimeout(delay, object){
+function timeoutRemoveElement(element){
 	setTimeout(function(){
-		object.style.display = "block";			
-	}, delay * 1000);
+		element.remove();
+	}, 1100);
+}
+
+function circleAnimationTimeout(answersElements, phaseShift, halfX, halfY, once){
+	// console.log("circleDraw");
+	if (document.querySelectorAll(".optionText").length == 0 ) return;
+
+	setTimeout(function(){
+		for (var i = answersElements.length - 1; i >= 0; i--) {
+			var elementPosition = getPositionForAnimatingQuestions(i, answersElements, phaseShift, halfX, halfY);
+			updateStylePosition(answersElements[i], elementPosition[0], elementPosition[1]);
+		};
+		if (once) return;
+		circleAnimationTimeout(answersElements, phaseShift + 0.5 / 57, halfX, halfY, false);
+	}, 50);
+}
+
+function getPositionForAnimatingQuestions(i, answersElements, phaseShift, halfX, halfY){
+
+	var currentElement = answersElements[i];
+	var amplitudeX = halfX / 1.7;
+	var amplitudeY = halfY / 2;
+	var phaseStep = 2*Math.PI / answersElements.length;
+	var x = (halfX + amplitudeX * Math.sin(phaseShift + phaseStep*i) ) - currentElement.clientWidth/2;
+	var y = (halfY + amplitudeY * Math.cos(phaseShift + phaseStep*i) ) - currentElement.clientHeight/2;	
+	return [x,y];
+}
+
+function updateStylePosition(element, x, y){
+	element.style.left = Math.round(x) + "px";
+	element.style.top = Math.round(y) + "px";
+	
+}
+
+
+function selector(selector){
+	return document.querySelector(selector);
 }
 
 function replaceClass(element, from, to){
@@ -182,4 +258,14 @@ function loadJsonFromFile(callbackFunction){
           }
     };
 	request.send();	
+}
+
+function shuffleArray(array) {
+    var randomIndex, storage;
+    for (var i = array.length - 1; i > 0; i--) {
+        randomIndex = Math.floor(Math.random() * (i + 1));
+        storage = array[i];
+        array[i] = array[randomIndex];
+        array[randomIndex] = storage;
+    }
 }
