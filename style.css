@@ -189,6 +189,7 @@ div{
 	text-shadow: 0px 0px 5px #000;
 	transition: 0.3s;
 	text-align: center;
+	max-width: 200px;
 
 }
 
@@ -279,6 +280,22 @@ div{
 	text-shadow: 0px 0px 8px #fff;
 	border: 1px solid #0093c9;
 	animation: pulseColor 2s ease infinite;
+}
+.correctAnswer{
+	background-color: #00984b ;
+	color: #fff;
+	text-shadow: 0px 0px 8px #fff;
+	border: 1px solid #000;
+	animation: pulseColor 2s ease infinite;
+	transition: 0.3s;
+}
+.wrongAnswer{
+	background-color: #981500 ;
+	color: #fff;
+	text-shadow: 0px 0px 8px #fff;
+	border: 1px solid #000;
+	animation: pulseColor 2s ease infinite;
+	transition: 0.3s;
 }
 
 .scaleIn{

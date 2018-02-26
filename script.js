@@ -125,6 +125,8 @@ function loadQuestion(currentQuestion){
 	})();
 	
 	var answers = QUESTIONS["questions"][currentQuestion]["answers"];
+	var rightAnswer = answers[0];
+	shuffleArray(answers);
 	var answersArea = document.querySelector(".answersArea");
 	var answersElements = new Array(answers.length);
 
@@ -158,7 +160,8 @@ function loadQuestion(currentQuestion){
 							allAnswers[i].style.animation = "scaleOutOthers 1s forwards";					
 							}
 							timeoutRemoveElement(allAnswers[i]);
-						};
+						};	
+						setQuestionResults(this.innerHTML == rightAnswer);						
 					});
 				}, 2700);
 			})(answerElement, i);					
@@ -184,8 +187,24 @@ function loadQuestion(currentQuestion){
 		
 	})();
 
+}
 
-
+function setQuestionResults(correctAnswer){
+	setTimeout(function(){
+		var currentIcon = selector("#questionIcon" + CURRENT_QUESTION);
+		currentIcon.style.animation = "none";
+		replaceClass(currentIcon, "activeQuestion", correctAnswer ? "correctAnswer" : "wrongAnswer");
+	},300);
+	var questionTextDiv = selector(".questionTextDiv");
+	questionTextDiv.classList.remove("animatedFadeIn");
+	questionTextDiv.style.animation = "fadeOut 0.5s forwards";
+	setTimeout(function(){
+		questionTextDiv.style.opacity = "0";
+		questionTextDiv.style.animation = "none";		
+	}, 600);
+	setTimeout(function(){		
+		loadQuestion(++CURRENT_QUESTION);
+	},1000);
 }
 
 function timeoutRemoveElement(element){
