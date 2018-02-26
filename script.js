@@ -68,8 +68,6 @@ function startQuiz(){
 	createQuestionsMap();
 	console.log(QUESTIONS);
 
-
-
 	setTimeout(function(){
 		loadQuestion(CURRENT_QUESTION);
 	}, 2000);
@@ -112,16 +110,25 @@ function loadQuestion(currentQuestion){
 	(function prepareBackground(){
 		var mainBack = document.querySelector(".mainBack");
 		var mainBackOverlay = document.querySelector(".mainBackOverlayImage");
-		mainBackOverlay.style.background = "url('imgs/img" + currentQuestion + ".jpg')";	
-		mainBackOverlay.style.backgroundSize = "900px 550px";	
-		mainBackOverlay.classList.add("animatedFadeIn");
+		
+		var pathMask = "url('imgs/img_number_.jpg";
+		mainBack.style.background = pathMask.replace("_number_",currentQuestion-1);					
+		mainBackOverlay.style.background = pathMask.replace("_number_",currentQuestion);					
+
+		mainBackOverlay.style.opacity = "0";
+		mainBackOverlay.classList.remove("animatedFadeIn");	
+		setTimeout(function(){
+			mainBackOverlay.classList.add("animatedFadeIn");	
+		},200);		
+
 	})();
 
 	(function loadQuestion(){
-		replaceClass(document.querySelector(".questionTextDiv"), "hidden", "animatedFadeIn");
-		document.querySelector(".questionTitle").innerHTML = 
+		replaceClass(selector(".questionTextDiv"), "hidden", "animatedFadeIn");
+		selector(".questionTextDiv").style.animation = "";
+		selector(".questionTitle").innerHTML = 
 			"Question " + (currentQuestion + 1) + "/" + QUESTIONS["questions"].length;
-		document.querySelector(".questionText").innerHTML = QUESTIONS["questions"][currentQuestion]["text"];
+		selector(".questionText").innerHTML = QUESTIONS["questions"][currentQuestion]["text"];
 	})();
 	
 	var answers = QUESTIONS["questions"][currentQuestion]["answers"];
@@ -203,8 +210,19 @@ function setQuestionResults(correctAnswer){
 		questionTextDiv.style.animation = "none";		
 	}, 600);
 	setTimeout(function(){		
-		loadQuestion(++CURRENT_QUESTION);
+		if (CURRENT_QUESTION >= USED_QUESTIONS_NUMBER-1){
+			endQuiz();		
+		}else{
+		loadQuestion(++CURRENT_QUESTION);			
+		}
 	},1000);
+}
+
+function endQuiz(){
+	alert(selectorAll(".wrongAnswer").length);
+	alert(selectorAll(".correctAnswer").length);
+
+	
 }
 
 function timeoutRemoveElement(element){
@@ -247,6 +265,10 @@ function updateStylePosition(element, x, y){
 
 function selector(selector){
 	return document.querySelector(selector);
+}
+
+function selectorAll(selector){
+	return document.querySelectorAll(selector);
 }
 
 function replaceClass(element, from, to){
