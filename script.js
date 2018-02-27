@@ -126,8 +126,14 @@ function loadQuestion(currentQuestion){
 	(function loadQuestion(){
 		replaceClass(selector(".questionTextDiv"), "hidden", "animatedFadeIn");
 		selector(".questionTextDiv").style.animation = "";
+		var timeForTheAnswer = 99;
 		selector(".questionTitle").innerHTML = 
-			"Question " + (currentQuestion + 1) + "/" + QUESTIONS["questions"].length;
+			"Question " + (currentQuestion + 1) + "/" + QUESTIONS["questions"].length +
+				 " : " + timeForTheAnswer + "s";
+		setTimeout(function(){
+			setTimerDown(selector(".questionTitle"), 0, timeForTheAnswer);
+		},3000);
+
 		selector(".questionText").innerHTML = QUESTIONS["questions"][currentQuestion]["text"];
 	})();
 	
@@ -156,19 +162,21 @@ function loadQuestion(currentQuestion){
 					answerElement.style.opacity = "1";
 					answerElement.style.animation = "none";
 					answerElement.classList.add("optionTextHover");
-					answerElement.addEventListener("click", function checkAnswer(){					
+					answerElement.addEventListener("click", function checkAnswer(){
 						this.removeEventListener("click", checkAnswer);	
+						if (this.classList.contains("fadingAway")){
+							return;
+						}
 						this.style.animation = "scaleOut 1s ease forwards";
-						this.classList.add("selectedAnswer");
+						this.classList.add("selectedAnswer");					
 						this.classList.remove("optionTextHover");
-						var allAnswers = document.querySelectorAll(".optionText");
-						for (var i = allAnswers.length - 1; i >= 0; i--) {
-							if (allAnswers[i] != this){
-							allAnswers[i].style.animation = "scaleOutOthers 1s forwards";					
-							}
-							timeoutRemoveElement(allAnswers[i]);
-						};	
-						setQuestionResults(this.innerHTML == rightAnswer);						
+						if (this.classList.contains("timeout")){
+							setRemoveOtherAnswersActions(null, "timeout");
+							setQuestionResults(false);
+						}else{							
+							setRemoveOtherAnswersActions(this, "");
+							setQuestionResults(this.innerHTML == rightAnswer);
+						}
 					});
 				}, 2700);
 			})(answerElement, i);					
@@ -201,6 +209,7 @@ function setQuestionResults(correctAnswer){
 		var currentIcon = selector("#questionIcon" + CURRENT_QUESTION);
 		currentIcon.style.animation = "none";
 		replaceClass(currentIcon, "activeQuestion", correctAnswer ? "correctAnswer" : "wrongAnswer");
+		currentIcon.setAttribute("time_stamp", extractTimeFromTimer() );
 	},300);
 	var questionTextDiv = selector(".questionTextDiv");
 	questionTextDiv.classList.remove("animatedFadeIn");
@@ -221,8 +230,55 @@ function setQuestionResults(correctAnswer){
 function endQuiz(){
 	alert(selectorAll(".wrongAnswer").length);
 	alert(selectorAll(".correctAnswer").length);
-
 	
+}
+
+function setTimerDown(element, iteration, seconds){
+	(function(element, iteration){
+		var theTimer = setTimeout(function(){		
+			if ((selector(".optionText").classList.item(3)) == "othersRemoving") {
+				window.clearTimeout(theTimer);
+				return;
+			}
+				var timeSymbolsStart = element.innerHTML.lastIndexOf(" ");
+				var titleText = element.innerHTML;
+				var timeLeft = titleText.substr(timeSymbolsStart+1); //60s
+				timeLeft = timeLeft.substr(0, timeLeft.length - 1); //60
+				if (timeLeft / seconds <= 0.5) {
+					var randomNoiseScale = Math.random() * (1 - timeLeft*2/seconds) * 0.05;
+					element.style.transform = "scale(" + (1+randomNoiseScale) + ")";								
+				}
+			if ((iteration % 20) === 0){
+				if (parseInt(timeLeft) <= 0 ) {
+					var allOptions = selectorAll(".optionText");			
+					for (var i = allOptions.length - 1; i >= 1; i--) {
+						allOptions[i].classList.add("fadingAway");	
+					};
+					allOptions[0].classList.add("timeout");
+					allOptions[0].click();			
+					return;
+				}					
+				element.innerHTML = titleText.substr(0, timeSymbolsStart+1) + (parseInt(timeLeft)-1) + "s";		
+			}
+
+			
+			setTimerDown(element, iteration + 1, seconds);
+
+		}, 50);
+	})(element, iteration);	
+}
+
+function setRemoveOtherAnswersActions(selectedAnswer, timeout){
+	var allAnswers = document.querySelectorAll(".optionText");
+	for (var i = allAnswers.length - 1; i >= 0; i--) {
+		if (allAnswers[i] != selectedAnswer){
+			allAnswers[i].style.animation = "scaleOutOthers 1s forwards";					
+		}
+		timeoutRemoveElement(allAnswers[i]);
+		if (timeout == ""){			
+			allAnswers[i].classList.add("othersRemoving");			
+		}
+	};	
 }
 
 function timeoutRemoveElement(element){
@@ -309,4 +365,12 @@ function shuffleArray(array) {
         array[i] = array[randomIndex];
         array[randomIndex] = storage;
     }
+}
+
+function extractTimeFromTimer(){
+	var timeSymbolsStart = selector(".questionTitle").innerHTML.lastIndexOf(" ");
+	var titleText = selector(".questionTitle").innerHTML;
+	var timeLeft = titleText.substr(timeSymbolsStart+1); //60s
+	timeLeft = timeLeft.substr(0, timeLeft.length - 1); //60
+	return timeLeft;
 }
