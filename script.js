@@ -1,21 +1,21 @@
 var MAIN_WIDTH = document.querySelector(".mainBack").clientWidth;
 var QUESTIONS = "";
-var USED_QUESTIONS_NUMBER = 2;
+var USED_QUESTIONS_NUMBER = 10;
 var CURRENT_QUESTION = 0;
 var TIME_ALLOWED = 99;
 var MUSIC_PLAYER_SNOW = "";
 var MUSIC_PLAYER_BGM = "";
-console.log(MAIN_WIDTH);
+var IMAGES_INDEXES = [0,1,2,3,4,5,6,7,8,9];
+shuffleArray(IMAGES_INDEXES);
+
+var retrievedObject = localStorage.getItem('result');
+console.log('retrievedObject: ', JSON.parse(retrievedObject));
 
 loadJsonFromFile(function(response){
 	QUESTIONS = JSON.parse(response);
 	showIntro();
-	initPlayer(MUSIC_PLAYER_SNOW, "snow.mp3", 0.4);
-
-	// var stringified = JSON.stringify(questions);
-	// localStorage.setItem('results', stringified);
-	// var retrievedObject = localStorage.getItem('results');
-	// console.log('retrievedObject: ', JSON.parse(retrievedObject));	
+	MUSIC_PLAYER_SNOW = initPlayer("snow.mp3", 0.4);
+	
 });
 
 function showIntro(){
@@ -60,7 +60,9 @@ function showIntro(){
 	
 };
 function startQuiz(){
-	initPlayer(MUSIC_PLAYER_BGM, "bgm.mp3", 1);
+	setTimeout(function(){
+		MUSIC_PLAYER_BGM = initPlayer("bgm.mp3", 1);
+	}, 1500);
 	// startSnow();!!!!!!!!!!!!!!!!!
 	shuffleArray(QUESTIONS["questions"]);
 	QUESTIONS["questions"].length = USED_QUESTIONS_NUMBER;
@@ -111,8 +113,12 @@ function loadQuestion(currentQuestion){
 		var mainBackOverlay = document.querySelector(".mainBackOverlayImage");
 		
 		var pathMask = "url('imgs/img_number_.jpg";
-		mainBack.style.background = pathMask.replace("_number_",currentQuestion-1);					
-		mainBackOverlay.style.background = pathMask.replace("_number_",currentQuestion);					
+		if (currentQuestion == 0){
+			mainBack.style.background = pathMask.replace("_number_","-1");	
+		}else{
+			mainBack.style.background = pathMask.replace("_number_",IMAGES_INDEXES[currentQuestion-1]);
+		}
+		mainBackOverlay.style.background = pathMask.replace("_number_",IMAGES_INDEXES[currentQuestion]);					
 
 		mainBackOverlay.style.opacity = "0";
 		mainBackOverlay.classList.remove("animatedFadeIn");	
@@ -227,6 +233,9 @@ function setQuestionResults(correctAnswer){
 }
 
 function endQuiz(){
+	var mainBack = document.querySelector(".mainBack");
+	var pathMask = "url('imgs/img_number_.jpg";
+	mainBack.style.background = pathMask.replace("_number_",IMAGES_INDEXES[CURRENT_QUESTION]);	
 
 	console.log(selectorAll(".wrongAnswer").length);
 	console.log(selectorAll(".correctAnswer").length);
@@ -238,13 +247,14 @@ function endQuiz(){
 		// actualTime / maximumTime ---ex:  86 / 100 = 0.86
 		var answerScore = parseInt(allCorrectAnswers[i].getAttribute("time_stamp")) / TIME_ALLOWED;		
 		answerScore = Math.ceil(answerScore*10) / 10;  // ex: 8.6 ~ 9    /10 = 0.9 ROUNDING!!!!!!!!
-
 		totalScore += answerScore;
 		console.log(answerScore);
 	};
 
 	var totalPercentage = Math.round( (totalScore / USED_QUESTIONS_NUMBER) * 100);
 	console.log("PERFECNT : " + totalPercentage);
+
+	writeToStorage(totalPercentage);
 
 	runPercentageResult(totalPercentage, 0);
 	// create percentageDiv
@@ -292,6 +302,19 @@ function runPercentageResult(totalPercentage, i){
 					backgroundFadingImage.style.background = "url('imgs/backgroundGood.jpg')";
 					backgroundFadingImage.style.backgroundSize = "cover";
 					outroText.innerHTML = "The Spring is saved! Bravo!";
+					MUSIC_PLAYER_SNOW.volume /= 1.4;
+					MUSIC_PLAYER_BGM.volume /= 1.4;
+					setTimeout(function(){
+						MUSIC_PLAYER_SNOW.volume /= 2;
+						MUSIC_PLAYER_BGM.volume /= 2;
+					},1000);
+					setTimeout(function(){
+						MUSIC_PLAYER_SNOW.pause();
+						MUSIC_PLAYER_BGM.pause();
+					},1700);
+					setTimeout(function(){
+						initPlayer("spring.mp3", 0.25);
+					},3000);
 				}else{
 					backgroundFadingImage.style.background = "url('imgs/backgroundBad.jpg')";
 					outroText.innerHTML = "The energy was not enough to save the Spring...";
@@ -449,7 +472,7 @@ function extractTimeFromTimer(){
 	timeLeft = timeLeft.substr(0, timeLeft.length - 1); //60
 	return timeLeft;
 }
-function initPlayer(player, track, volume){
+function initPlayer(track, volume){
 	player = new Audio(track);
 	player.addEventListener('ended', function() {
 	    this.currentTime = 0;
@@ -457,4 +480,11 @@ function initPlayer(player, track, volume){
 	}, false);
 	player.volume = volume;
 	player.play();
+	return player;
+}
+
+function writeToStorage(totalPercentage){
+	var JSONdata = {"total_score" : totalPercentage};
+	var stringified = JSON.stringify(JSONdata);
+	localStorage.setItem('result', stringified);
 }
