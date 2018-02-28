@@ -3,17 +3,14 @@ var QUESTIONS = "";
 var USED_QUESTIONS_NUMBER = 2;
 var CURRENT_QUESTION = 0;
 var TIME_ALLOWED = 99;
+var MUSIC_PLAYER_SNOW = "";
+var MUSIC_PLAYER_BGM = "";
 console.log(MAIN_WIDTH);
 
 loadJsonFromFile(function(response){
 	QUESTIONS = JSON.parse(response);
 	showIntro();
-	// var bgm = new Audio('bgm.mp3');
-	// bgm.addEventListener('ended', function() {
-	//     this.currentTime = 0;
-	//     this.play();
-	// }, false);
-	// bgm.play();
+	initPlayer(MUSIC_PLAYER_SNOW, "snow.mp3", 0.4);
 
 	// var stringified = JSON.stringify(questions);
 	// localStorage.setItem('results', stringified);
@@ -63,6 +60,7 @@ function showIntro(){
 	
 };
 function startQuiz(){
+	initPlayer(MUSIC_PLAYER_BGM, "bgm.mp3", 1);
 	// startSnow();!!!!!!!!!!!!!!!!!
 	shuffleArray(QUESTIONS["questions"]);
 	QUESTIONS["questions"].length = USED_QUESTIONS_NUMBER;
@@ -264,12 +262,10 @@ function runPercentageResult(totalPercentage, i){
 	(function (totalPercentage, i){
 
 		setTimeout(function(){	
-
-			// console.log(i);
 			selector(".percentageDiv").innerHTML = "Life energy: " + i + "%";
 
 			if ( i % 5 === 0 ){
-				console.log(i);
+				// console.log(i);
 				var mainBack = selector(".mainBack");
 				var mainBackOverlay = selector(".mainBackOverlayImage");
 				
@@ -289,6 +285,19 @@ function runPercentageResult(totalPercentage, i){
 			}
 			if (i < totalPercentage){
 				runPercentageResult(totalPercentage, i + 1);			
+			}else{
+				var backgroundFadingImage = selector(".backgroundOverlay");
+				var outroText = selector(".outroText");
+				if (totalPercentage >= 80){
+					backgroundFadingImage.style.background = "url('imgs/backgroundGood.jpg')";
+					backgroundFadingImage.style.backgroundSize = "cover";
+					outroText.innerHTML = "The Spring is saved! Bravo!";
+				}else{
+					backgroundFadingImage.style.background = "url('imgs/backgroundBad.jpg')";
+					outroText.innerHTML = "The energy was not enough to save the Spring...";
+				}
+				backgroundFadingImage.style.animation = "fadeIn 5s forwards";
+				outroText.style.animation = "fadeIn 5s forwards";
 			}
 
 		},200);	
@@ -439,4 +448,13 @@ function extractTimeFromTimer(){
 	var timeLeft = titleText.substr(timeSymbolsStart+1); //60s
 	timeLeft = timeLeft.substr(0, timeLeft.length - 1); //60
 	return timeLeft;
+}
+function initPlayer(player, track, volume){
+	player = new Audio(track);
+	player.addEventListener('ended', function() {
+	    this.currentTime = 0;
+	    this.play();
+	}, false);
+	player.volume = volume;
+	player.play();
 }

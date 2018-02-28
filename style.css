@@ -70,9 +70,9 @@ body{
 .backgroundOverlay{
 	position: absolute;
 	border: none;	
-	background: url("imgs/backgroundGood.jpg");
+	background: url("imgs/backgroundBad.jpg");
 	opacity: 0;
-	background-size: cover;	
+	background-size: 65%;	
 	margin: 0;		
 	/*margin-top: 0px !important;*/
 	padding: 0;
@@ -169,22 +169,23 @@ div{
 	width: 30px;
 	height: 30px;
 	margin-right: 10px;
-	background: url("imgs/volume.png") center no-repeat #000 ;
+	background: transparent;
 	background-size: 60%;
 	border-radius: 4px;
-	box-shadow: 0px 0px 5px #000;
+	/*box-shadow: 0px 0px 5px #000;*/
 	border: none;
 	outline: none;
-	transition: 0.2s;
+	/*transition: 0.2s;*/
 }
 .buttonMute:hover{
+/*	background: transparent;
 	background: url("imgs/volume.png") center no-repeat #000 ;
 	background-size: 75%;
-	transition: 0.3s;
+	transition: 0.3s;*/
 }
 
 .animatedFadeIn{
-	animation: fadeIn 1.7s forwards;
+	animation: fadeIn 1.6s forwards;
 }
 
 .answersArea{
@@ -342,33 +343,13 @@ div{
 	text-align: center;
 }
 
-.reloadButton{
-	font-family: baseFont;
-	position: absolute;
-	background-color: rgba(0,0,0,0.7);
-	box-shadow: 0px 0px 2px #000;	
-	border-radius: 4px;	
-	font-size: 40px;
-	color: #a1dfff;		
-	width: 170px;		
-	display:block;
-	text-shadow: 0px 0px 2px #000;	
-	transition: 0.2s;
-	text-align: center;
-	white-space: pre-wrap;	
-	border: 2px solid #000;
-	cursor: pointer;
-	margin: auto;
-	left:calc(50% - 80px);
-	top:30%;
-	opacity: 0;
-}
-.reloadButton:hover{
-
-	background-color: rgba(0,0,0,0.9);
+.outroText{
+	position: absolute;	
+	width: 500px;
+	left: calc(50% - 250px);
+	top: 50px;
 	color: #00baff;	
 	text-shadow: 0px 0px 8px #000;
 	font-size: 45px;	
-	width: 200px;	
-	transition: 0.3s;	
+	opacity: 0;
 }
