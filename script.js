@@ -1,7 +1,8 @@
 var MAIN_WIDTH = document.querySelector(".mainBack").clientWidth;
 var QUESTIONS = "";
-var USED_QUESTIONS_NUMBER = 10;
+var USED_QUESTIONS_NUMBER = 2;
 var CURRENT_QUESTION = 0;
+var TIME_ALLOWED = 99;
 console.log(MAIN_WIDTH);
 
 loadJsonFromFile(function(response){
@@ -126,12 +127,12 @@ function loadQuestion(currentQuestion){
 	(function loadQuestion(){
 		replaceClass(selector(".questionTextDiv"), "hidden", "animatedFadeIn");
 		selector(".questionTextDiv").style.animation = "";
-		var timeForTheAnswer = 99;
+		selector(".questionTitle").style.color = "rgb(206, 255, 255)";
 		selector(".questionTitle").innerHTML = 
 			"Question " + (currentQuestion + 1) + "/" + QUESTIONS["questions"].length +
-				 " : " + timeForTheAnswer + "s";
+				 " : " + TIME_ALLOWED + "s";
 		setTimeout(function(){
-			setTimerDown(selector(".questionTitle"), 0, timeForTheAnswer);
+			setTimerDown(selector(".questionTitle"), 0, TIME_ALLOWED);
 		},3000);
 
 		selector(".questionText").innerHTML = QUESTIONS["questions"][currentQuestion]["text"];
@@ -228,8 +229,23 @@ function setQuestionResults(correctAnswer){
 }
 
 function endQuiz(){
+
 	alert(selectorAll(".wrongAnswer").length);
 	alert(selectorAll(".correctAnswer").length);
+
+	var allCorrectAnswers = selectorAll(".correctAnswer");
+
+	var totalScore = 0;
+	for (var i = allCorrectAnswers.length - 1; i >= 0; i--) {
+		// actualTime / maximumTime ---ex:  86 / 100 = 0.86
+		var answerScore = parseInt(allCorrectAnswers[i].getAttribute("time_stamp")) / TIME_ALLOWED;		
+		answerScore = Math.ceil(answerScore*10) / 10;  // ex: 8.6 ~ 9    /10 = 0.9 ROUNDING!!!!!!!!
+
+		totalScore += answerScore;
+		alert(answerScore);
+	};
+
+	alert("PERFECNT : " + Math.round( (totalScore / USED_QUESTIONS_NUMBER) * 100));
 	
 }
 
@@ -248,6 +264,9 @@ function setTimerDown(element, iteration, seconds){
 					var randomNoiseScale = Math.random() * (1 - timeLeft*2/seconds) * 0.05;
 					element.style.transform = "scale(" + (1+randomNoiseScale) + ")";								
 				}
+				var reddeningColor =  Math.round(255*(timeLeft/seconds)) + "," 
+												+ Math.round(255*(timeLeft/seconds)) + ")";
+				element.style.color = "rgb(206," +reddeningColor;
 			if ((iteration % 20) === 0){
 				if (parseInt(timeLeft) <= 0 ) {
 					var allOptions = selectorAll(".optionText");			
