@@ -230,8 +230,8 @@ function setQuestionResults(correctAnswer){
 
 function endQuiz(){
 
-	alert(selectorAll(".wrongAnswer").length);
-	alert(selectorAll(".correctAnswer").length);
+	console.log(selectorAll(".wrongAnswer").length);
+	console.log(selectorAll(".correctAnswer").length);
 
 	var allCorrectAnswers = selectorAll(".correctAnswer");
 
@@ -242,11 +242,58 @@ function endQuiz(){
 		answerScore = Math.ceil(answerScore*10) / 10;  // ex: 8.6 ~ 9    /10 = 0.9 ROUNDING!!!!!!!!
 
 		totalScore += answerScore;
-		alert(answerScore);
+		console.log(answerScore);
 	};
 
-	alert("PERFECNT : " + Math.round( (totalScore / USED_QUESTIONS_NUMBER) * 100));
+	var totalPercentage = Math.round( (totalScore / USED_QUESTIONS_NUMBER) * 100);
+	console.log("PERFECNT : " + totalPercentage);
+
+	runPercentageResult(totalPercentage, 0);
+	// create percentageDiv
+	selector(".questionTextDiv").remove();
+	var startQuizButton = createCustomElement(
+		"div",
+		"Life energy: 0%",
+		document.querySelector(".mainBack"),
+		["percentageDiv","animatedFadeIn"]
+	);
 	
+}
+
+function runPercentageResult(totalPercentage, i){
+	(function (totalPercentage, i){
+
+		setTimeout(function(){	
+
+			// console.log(i);
+			selector(".percentageDiv").innerHTML = "Life energy: " + i + "%";
+
+			if ( i % 5 === 0 ){
+				console.log(i);
+				var mainBack = selector(".mainBack");
+				var mainBackOverlay = selector(".mainBackOverlayImage");
+				
+				var pathMask = "url('imgs/img-result_number_.jpg";
+				if (i != 0){
+					mainBack.style.background = pathMask.replace("_number_", Math.round(i/5) - 1);							
+				}
+
+				mainBackOverlay.style.background = pathMask.replace("_number_", Math.round(i/5));					
+
+				mainBackOverlay.style.opacity = "0";
+				mainBackOverlay.classList.remove("animatedFadeIn");	
+				setTimeout(function(){
+					mainBackOverlay.classList.add("animatedFadeIn");	
+				},100);		
+
+			}
+			if (i < totalPercentage){
+				runPercentageResult(totalPercentage, i + 1);			
+			}
+
+		},200);	
+
+	})(totalPercentage, i);		
 }
 
 function setTimerDown(element, iteration, seconds){
