@@ -1,10 +1,11 @@
 var MAIN_WIDTH = document.querySelector(".mainBack").clientWidth;
 var QUESTIONS = "";
-var USED_QUESTIONS_NUMBER = 10;
+var USED_QUESTIONS_NUMBER = 1;
 var CURRENT_QUESTION = 0;
 var TIME_ALLOWED = 99;
 var MUSIC_PLAYER_SNOW = "";
 var MUSIC_PLAYER_BGM = "";
+var MUSIC_PLAYER_SFX = "";
 var IMAGES_INDEXES = [0,1,2,3,4,5,6,7,8,9];
 shuffleArray(IMAGES_INDEXES);
 
@@ -41,7 +42,8 @@ function showIntro(){
 				}
 			}, 1000);
 
-			startQuizButton.addEventListener("click", function startQuizClick(){			
+			startQuizButton.addEventListener("click", function startQuizClick(){
+				MUSIC_PLAYER_SFX = initSound("click.mp3");			
 				startQuizButton.classList.remove("startQuizHoverClass");
 				startQuizButton.removeEventListener("click", startQuizClick);				
 				startQuizButton.style.animation = "scaleOutStart ease 0.4s forwards";
@@ -53,6 +55,11 @@ function showIntro(){
 					startQuiz();
 				}, 1000);
 			});
+
+			startQuizButton.onmouseover = function(){				
+				MUSIC_PLAYER_SFX = initSound("hover.mp3");
+			};
+			
 
 		}, 1000);	
 
@@ -168,6 +175,7 @@ function loadQuestion(currentQuestion){
 					answerElement.style.animation = "none";
 					answerElement.classList.add("optionTextHover");
 					answerElement.addEventListener("click", function checkAnswer(){
+						MUSIC_PLAYER_SFX = initSound("click.mp3");
 						this.removeEventListener("click", checkAnswer);	
 						if (this.classList.contains("fadingAway")){
 							return;
@@ -183,6 +191,9 @@ function loadQuestion(currentQuestion){
 							setQuestionResults(this.innerHTML == rightAnswer);
 						}
 					});
+					answerElement.onmouseover = function(){				
+						MUSIC_PLAYER_SFX = initSound("hover.mp3");
+					};
 				}, 2700);
 			})(answerElement, i);					
 		};		
@@ -297,28 +308,34 @@ function runPercentageResult(totalPercentage, i){
 				runPercentageResult(totalPercentage, i + 1);			
 			}else{
 				var backgroundFadingImage = selector(".backgroundOverlay");
-				var outroText = selector(".outroText");
+				var outroText = selector(".outroText");				
+				//fade out ... KINDA
+				MUSIC_PLAYER_SNOW.volume /= 1.4;
+				MUSIC_PLAYER_BGM.volume /= 1.4;
+				setTimeout(function(){
+					MUSIC_PLAYER_SNOW.volume /= 2;
+					MUSIC_PLAYER_BGM.volume /= 1.8;
+				},1000);
+				setTimeout(function(){					
+					MUSIC_PLAYER_BGM.volume /= 2.5;
+				},1500);
+				setTimeout(function(){
+					MUSIC_PLAYER_SNOW.pause();
+					MUSIC_PLAYER_BGM.pause();
+				},2000);
+				var initFinalMusicName = "spring";
 				if (totalPercentage >= 80){
 					backgroundFadingImage.style.background = "url('imgs/backgroundGood.jpg')";
 					backgroundFadingImage.style.backgroundSize = "cover";
-					outroText.innerHTML = "The Spring is saved! Bravo!";
-					MUSIC_PLAYER_SNOW.volume /= 1.4;
-					MUSIC_PLAYER_BGM.volume /= 1.4;
-					setTimeout(function(){
-						MUSIC_PLAYER_SNOW.volume /= 2;
-						MUSIC_PLAYER_BGM.volume /= 2;
-					},1000);
-					setTimeout(function(){
-						MUSIC_PLAYER_SNOW.pause();
-						MUSIC_PLAYER_BGM.pause();
-					},1700);
-					setTimeout(function(){
-						initPlayer("spring.mp3", 0.25);
-					},3000);
+					outroText.innerHTML = "The Spring is saved! Bravo!";					
 				}else{
 					backgroundFadingImage.style.background = "url('imgs/backgroundBad.jpg')";
 					outroText.innerHTML = "The energy was not enough to save the Spring...";
+					initFinalMusicName = "lacry";
 				}
+				setTimeout(function(){
+					initPlayer(initFinalMusicName+".mp3", 0.25);
+				},3000);
 				backgroundFadingImage.style.animation = "fadeIn 5s forwards";
 				outroText.style.animation = "fadeIn 5s forwards";
 			}
@@ -479,6 +496,12 @@ function initPlayer(track, volume){
 	    this.play();
 	}, false);
 	player.volume = volume;
+	player.play();
+	return player;
+}
+
+function initSound(track){
+	player = new Audio(track);
 	player.play();
 	return player;
 }
