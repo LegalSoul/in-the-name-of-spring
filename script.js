@@ -1,6 +1,6 @@
 var MAIN_WIDTH = document.querySelector(".mainBack").clientWidth;
 var QUESTIONS = "";
-var USED_QUESTIONS_NUMBER = 1;
+var USED_QUESTIONS_NUMBER = 10;
 var CURRENT_QUESTION = 0;
 var TIME_ALLOWED = 99;
 var MUSIC_PLAYER_SNOW = "";
@@ -225,7 +225,16 @@ function setQuestionResults(correctAnswer){
 		var currentIcon = selector("#questionIcon" + CURRENT_QUESTION);
 		currentIcon.style.animation = "none";
 		replaceClass(currentIcon, "activeQuestion", correctAnswer ? "correctAnswer" : "wrongAnswer");
-		currentIcon.setAttribute("time_stamp", extractTimeFromTimer() );
+		var currentTimeStamp = parseInt(extractTimeFromTimer());	
+		var timeStampRoundingStep = TIME_ALLOWED / 10;	
+		var currentTimeStampPercent = Math.ceil(currentTimeStamp / timeStampRoundingStep) * timeStampRoundingStep;
+		currentTimeStampPercent = Math.floor( (currentTimeStampPercent / TIME_ALLOWED ) * 100);
+		if (correctAnswer){
+			currentIcon.style.background = ("linear-gradient(to top, #00984b, #00984b " 
+				+ currentTimeStampPercent + "%, #981500 " 
+				+ currentTimeStampPercent + "%, #981500)");			
+		}
+		currentIcon.setAttribute("time_stamp", currentTimeStampPercent );
 	},300);
 	var questionTextDiv = selector(".questionTextDiv");
 	questionTextDiv.classList.remove("animatedFadeIn");
@@ -254,15 +263,12 @@ function endQuiz(){
 	var allCorrectAnswers = selectorAll(".correctAnswer");
 
 	var totalScore = 0;
-	for (var i = allCorrectAnswers.length - 1; i >= 0; i--) {
-		// actualTime / maximumTime ---ex:  86 / 100 = 0.86
-		var answerScore = parseInt(allCorrectAnswers[i].getAttribute("time_stamp")) / TIME_ALLOWED;		
-		answerScore = Math.ceil(answerScore*10) / 10;  // ex: 8.6 ~ 9    /10 = 0.9 ROUNDING!!!!!!!!
-		totalScore += answerScore;
-		console.log(answerScore);
+	for (var i = allCorrectAnswers.length - 1; i >= 0; i--) {		
+		var answerScore = parseInt(allCorrectAnswers[i].getAttribute("time_stamp"));
+		totalScore += answerScore;		
 	};
 
-	var totalPercentage = Math.round( (totalScore / USED_QUESTIONS_NUMBER) * 100);
+	var totalPercentage = Math.round( (totalScore / USED_QUESTIONS_NUMBER));
 	console.log("PERFECNT : " + totalPercentage);
 
 	writeToStorage(totalPercentage);
