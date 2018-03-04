@@ -12,6 +12,7 @@ shuffleArray(IMAGES_INDEXES);
 
 loadJsonFromFile(function(response){
 	QUESTIONS = JSON.parse(response);
+	console.log(QUESTIONS);
 	showIntro();
 	MUSIC_PLAYER_SNOW = initPlayer("snow.mp3", 0.4);
 	
@@ -27,15 +28,17 @@ function showIntro(){
 		);
 
 		var prevScore = "No record";		
+		localStorage.clear();
 		var retrievedPreviousScoreObject = localStorage.getItem('result');
 		if (retrievedPreviousScoreObject != null){
 			retrievedPreviousScoreObject = JSON.parse(retrievedPreviousScoreObject);				
 			prevScore = retrievedPreviousScoreObject.total_score;
 			console.log('retrievedObject: ', retrievedPreviousScoreObject);
 		}
+		prevScore += prevScore != "No record" ? "%" : "";		
 		var prevScore = createCustomElement(
 			"div",
-			"Previous score: " + prevScore + "%",
+			"Previous score: " + prevScore,
 			document.querySelector(".mainBack"),
 			["prevScore","animatedFadeIn"]
 		);
