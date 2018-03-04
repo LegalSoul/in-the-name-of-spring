@@ -28,7 +28,6 @@ function showIntro(){
 		);
 
 		var prevScore = "No record";		
-		localStorage.clear();
 		var retrievedPreviousScoreObject = localStorage.getItem('result');
 		if (retrievedPreviousScoreObject != null){
 			retrievedPreviousScoreObject = JSON.parse(retrievedPreviousScoreObject);				
