@@ -1,225 +1,220 @@
 {
 	"questions": [
 		{
-			"text": "What will be the output of the following:<br>alert(new Array(4))",
+			"text": "What will be the output of the following:<br>alert(new Array(4));",
 			"answers": [
 				",,,",
+				",,,,",
+				",,",
+				"....",
+				"...",
+				"..",
+				"null,null,null,null",
+				"undefined,undefined, undefined,undefined"
+			]
+		},
+		{
+			"text": "What will be the output of the following:<br>alert(Number.MAX_VALUE + 100 - Number.MAX_VALUE);",
+			"answers": [
+				"0",
+				"100",
+				"-100",
+				"Infinity",
+				"Infinity + 100",
+				"null",
+				"undefined",
+				"Overflow"
+			]
+		},
+		{
+			"text": "What will be the output of the following:<br>alert(Infinity - Infinity);",
+			"answers": [
+				"NaN",
+				"undefined",
+				"null",
+				"0",
+				"0.4681257e-308",
+				"Infinity"
+			]
+		},
+		{
+			"text": "What will be the output of the following:<br>alert(true / 2 + false - 3);",
+			"answers": [
+				"-2.5",
+				"2.5",
+				"true",
+				"false",
+				"undefined",
+				"null"
+			]
+		},
+		{
+			"text": "What will be the output of the following:<br>alert(!new Array(4)[3] || true==false);",
+			"answers": [
+				"true",
+				"false",
+				"undefined",
+				"null",
+				"0",
+				"1"
+			]
+		},
+		{
+			"text": "What will be the output of the following:<br>alert(!!1==false==!!!true==-100+101);",
+			"answers": [
+				"true",
+				"false",
 				"1",
-				"2",
-				"4",
-				"7",
-				"8",
-				"9",
-				"3"
+				"0",
+				"null",
+				"undefined"
 			]
 		},
 		{
-			"text": "2WHO?",
+			"text": "What will be the output of the following:<br>var a, b;<br>alert(a + b);",
 			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
+				"NaN",
+				"0",
+				"undefined",
+				"undefined undefined",
+				"NaN undefined",
+				"undefined NaN"
 			]
 		},
 		{
-			"text": "3WHEN?",
+			"text": "What will be the output of the following:<br>var a = 5, a = a - a + 5;<br>alert(a == (a = 6));",
 			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
+				"false",
+				"true",
+				"undefined",
+				"null",
+				"5",
+				"6"
 			]
 		},
 		{
-			"text": "4WHY?",
+			"text": "What will be the output of the following:<br>var a = 5;<br>alert((a == a + 1 - 1) * <br>(a == a - 1) + a);",
 			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
+				"5",
+				"0",
+				"true",
+				"false",
+				"undefined",
+				"6",
+				"-1",
+				"80"
 			]
 		},
 		{
-			"text": "5WHO?",
+			"text": "What will be the output of the following:<br>alert(typeof(Array));",
 			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
+				"function",
+				"array",
+				"constructor",
+				"undefined",
+				"infinity",
+				"0",
+				"1",
+				"Object",
+				"object"
 			]
 		},
 		{
-			"text": "6WHEN?",
+			"text": "What will be the output of the following:<br>alert(typeof(null));",
 			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
+				"object",
+				"Object",
+				"function",
+				"array",
+				"constructor",
+				"undefined",
+				"NaN",
+				"0",
+				"1"
 			]
 		},
 		{
-			"text": "7WHY?",
+			"text": "What will be the output of the following:<br>alert(5 + 5 - '' + 5 + '');",
 			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
+				"15",
+				"10",
+				"5",
+				"NaN",
+				"undefined",
+				"0"
 			]
 		},
 		{
-			"text": "8WHO?",
+			"text": "What will be the output of the following:<br>alert((2,5 - 1) * 2);",
 			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
+				"6",
+				"1",
+				"3",
+				"-3",
+				"-6",
+				"-1"
 			]
 		},
 		{
-			"text": "9WHEN?",
+			"text": "What is the extention of a JavaScript file?",
 			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
+				".js",
+				".javas",
+				".jscript",
+				".jsp",
+				".script",
+				".java"
 			]
 		},
 		{
-			"text": "10WHEN?",
+			"text": "Is the following true or false?<br>JavaScript and Java are very similar programming languages",
 			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
+				"False",
+				"True"			
 			]
 		},
 		{
-			"text": "11WHEN?",
+			"text": "Is the following true or false?<br>JavaScript is a trademark of Oracle Corporation",
 			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
+				"True",
+				"False",
+				"Only after 6 PM",
+				"Only on Mondays"
 			]
 		},
 		{
-			"text": "12WHEN?",
+			"text": "Is the following true or false?<br>JavaScript is a weakly typed language",
 			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
+				"True",
+				"False",
+				"Only after the midnight",
+				"Only when it's snowing",
+				"We can decide it ourselves at runtime"
 			]
 		},
 		{
-			"text": "13WHEN?",
+			"text": "Is the following true or false?<br>JavaScript is used only for the client-side",
 			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
+				"False",
+				"True"
 			]
 		},
 		{
-			"text": "14WHEN?",
+			"text": "Is the following true or false?<br>JavaScript is implemented in the same way in all the browsers",
 			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
+				"False",
+				"True",
+				"In Firefox and Chrome only",
+				"In Safari and IE only"				
 			]
 		},
 		{
-			"text": "15WHEN?",
+			"text": "Is the following true or false?<br>JavaScript can remove the &lt;html&gt; tag<br>from the document page",
 			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
-			]
-		},
-		{
-			"text": "16WHEN?",
-			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
-			]
-		},
-		{
-			"text": "17WHEN?",
-			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
-			]
-		},
-		{
-			"text": "18WHEN?",
-			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
-			]
-		},
-		{
-			"text": "19WHEN?",
-			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
-			]
-		},
-		{
-			"text": "20WHEN?",
-			"answers": [
-				"1cause",
-				"2because",
-				"3because cause",
-				"4NO",
-				"5YES yesssss YESSSS",
-				"6YES yesssss YASSZds d sd s sdd s XCZSS"
+				"True",
+				"False",
+				"Depends on the weather",
+				"Depends on the web page type"				
 			]
 		}
 	],

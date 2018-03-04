@@ -2,7 +2,7 @@ var MAIN_WIDTH = document.querySelector(".mainBack").clientWidth;
 var QUESTIONS = "";
 var USED_QUESTIONS_NUMBER = 10;
 var CURRENT_QUESTION = 0;
-var TIME_ALLOWED = 60;
+var TIME_ALLOWED = 20;
 var MUSIC_PLAYER_SNOW = "";
 var MUSIC_PLAYER_BGM = "";
 var MUSIC_PLAYER_SFX = "";
@@ -35,7 +35,7 @@ function showIntro(){
 		}
 		var prevScore = createCustomElement(
 			"div",
-			"Previous score: " + prevScore,
+			"Previous score: " + prevScore + "%",
 			document.querySelector(".mainBack"),
 			["prevScore","animatedFadeIn"]
 		);
@@ -84,7 +84,7 @@ function startQuiz(){
 		MUSIC_PLAYER_BGM = initPlayer("bgm.mp3", 1);
 	}, 1500);
 	// startSnow();!!!!!!!!!!!!!!!!!	
-	//shuffleArray(QUESTIONS["questions"]);
+	shuffleArray(QUESTIONS["questions"]);
 	QUESTIONS["questions"].length = USED_QUESTIONS_NUMBER;
 	createQuestionsMap();
 	console.log(QUESTIONS);
