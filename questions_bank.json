@@ -1,9 +1,9 @@
 {
 	"questions": [
 		{
-			"text": "How many datatypes are there in Javascript",
+			"text": "What will be the output of the following:<br>alert(new Array(4))",
 			"answers": [
-				"6",
+				",,,",
 				"1",
 				"2",
 				"4",
@@ -223,5 +223,5 @@
 			]
 		}
 	],
-	"introText": "Sometimes Winter evenings are getting too cold and the warmth in our hearts starts to fade away... \n\n In times like these all that we need is a drop of light, the spring sun that will chase away the cold and blue feelings. \n\n This JavaScript quiz was made in the name of Spring. Every correct answer will give a bit of warm JavaScript energy to the dying flower of life that is our only hope for bringing Spring back...\n\nHurry up, with every 10 seconds Winter steals 1 percent from the life energy. And we need at least 75% of energy..."
+	"introText": "Sometimes Winter evenings are getting too cold and the warmth in our hearts starts to fade away... \n\n In times like these all that we need is a drop of light, the spring sun that will chase away the cold and blue feelings. \n\n This JavaScript quiz was made in the name of Spring. Every correct answer will give a bit of warm JavaScript energy to the dying flower of life that is our only hope for bringing Spring back...\n\nHurry up, with every xxxxxx seconds Winter steals 1 percent from the life energy. And we need at least 75% of energy..."
 }

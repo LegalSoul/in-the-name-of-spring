@@ -2,15 +2,13 @@ var MAIN_WIDTH = document.querySelector(".mainBack").clientWidth;
 var QUESTIONS = "";
 var USED_QUESTIONS_NUMBER = 10;
 var CURRENT_QUESTION = 0;
-var TIME_ALLOWED = 99;
+var TIME_ALLOWED = 60;
 var MUSIC_PLAYER_SNOW = "";
 var MUSIC_PLAYER_BGM = "";
 var MUSIC_PLAYER_SFX = "";
 var IMAGES_INDEXES = [0,1,2,3,4,5,6,7,8,9];
 shuffleArray(IMAGES_INDEXES);
 
-var retrievedObject = localStorage.getItem('result');
-console.log('retrievedObject: ', JSON.parse(retrievedObject));
 
 loadJsonFromFile(function(response){
 	QUESTIONS = JSON.parse(response);
@@ -20,12 +18,26 @@ loadJsonFromFile(function(response){
 });
 
 function showIntro(){
-	setTimeout(function(){ 
+	setTimeout(function(){ 		
 		var introDiv = createCustomElement(
 			"div",
-			QUESTIONS.introText,
+			QUESTIONS.introText.replace("xxxxxx",Math.round(TIME_ALLOWED/10)),
 			document.querySelector(".mainBack"),
 			["introText","animatedFadeIn"]
+		);
+
+		var prevScore = "No record";		
+		var retrievedPreviousScoreObject = localStorage.getItem('result');
+		if (retrievedPreviousScoreObject != null){
+			retrievedPreviousScoreObject = JSON.parse(retrievedPreviousScoreObject);				
+			prevScore = retrievedPreviousScoreObject.total_score;
+			console.log('retrievedObject: ', retrievedPreviousScoreObject);
+		}
+		var prevScore = createCustomElement(
+			"div",
+			"Previous score: " + prevScore,
+			document.querySelector(".mainBack"),
+			["prevScore","animatedFadeIn"]
 		);
 
 		setTimeout(function(){ 
@@ -49,6 +61,7 @@ function showIntro(){
 				startQuizButton.style.animation = "scaleOutStart ease 0.4s forwards";
 				startQuizButton.style.cursor = "default";
 				introDiv.style.animation = "fadeOut 0.8s forwards";
+				prevScore.style.animation = "fadeOut 0.8s forwards";
 				setTimeout(function(){					
 					startQuizButton.remove();
 					introDiv.remove();
@@ -70,8 +83,8 @@ function startQuiz(){
 	setTimeout(function(){
 		MUSIC_PLAYER_BGM = initPlayer("bgm.mp3", 1);
 	}, 1500);
-	// startSnow();!!!!!!!!!!!!!!!!!
-	shuffleArray(QUESTIONS["questions"]);
+	// startSnow();!!!!!!!!!!!!!!!!!	
+	//shuffleArray(QUESTIONS["questions"]);
 	QUESTIONS["questions"].length = USED_QUESTIONS_NUMBER;
 	createQuestionsMap();
 	console.log(QUESTIONS);
@@ -330,7 +343,7 @@ function runPercentageResult(totalPercentage, i){
 					MUSIC_PLAYER_BGM.pause();
 				},2000);
 				var initFinalMusicName = "spring";
-				if (totalPercentage >= 80){
+				if (totalPercentage >= 75){
 					backgroundFadingImage.style.background = "url('imgs/backgroundGood.jpg')";
 					backgroundFadingImage.style.backgroundSize = "cover";
 					outroText.innerHTML = "The Spring is saved! Bravo!";					
